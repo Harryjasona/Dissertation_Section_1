@@ -112,7 +112,7 @@ regress CSSD D1Lower D1Upper
 regress CSAD D2Lower D2upper�
 
 
-120 regress CSSD D2Lower D2upper
+regress CSSD D2Lower D2upper
 
 ///Finally we regress spyadjcloseLnDayRtn and spyadjcloseLnDayRtn^2 with CSAD and CSSD as our explanatory variables 
  
