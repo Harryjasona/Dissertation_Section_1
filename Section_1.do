@@ -12,10 +12,11 @@ drop if time<1491
 foreach v of varlist spyadjclose-xlyadjclose{
 generate `v'LnDayRtn=(ln(`v'/`v'[_n-1]))*100
 }
-//Here we drop all the generated missing values
+//Here we drop all the missing values
 drop if spyadjcloseLnDayRtn==.
 
-//For easy of communication and reablility we set appropriate labels for all the newly generated columns
+//For easy of communication and readability we set appropriate labels for all the newly generated columns
+
 
 label variable spyadjcloseLnDayRtn "SPY Ln Day Return"
 
@@ -37,7 +38,28 @@ label variable xlvadjcloseLnDayRtn "XLV Ln Day Return "
 
 label variable xlyadjcloseLnDayRtn "XLY Ln Day Return"
 
-//Here we create the dummy variables for the percentiles that we need to run the regression in line with the parameters set out in the paper
+//Here we create the dummy variables for the percentiles that we need in order to run the regression in line with the parameters set out in the paper
+
+//Lower 0.5%
+egen PL05= pctile(spyadjcloseLnDayRtn), p(0.5)
+gen D05Lower=0
+replace D05Lower=1 if spyadjcloseLnDayRtn<=PL05
+
+//Upper 0.5% 
+egen PL995= pctile(spyadjcloseLnDayRtn), p(99.5)
+gen D05upper=0
+replace D05upper=1 if spyadjcloseLnDayRtn>=PL995
+
+//Lower 1% 
+egen PL1= pctile(spyadjcloseLnDayRtn), p(1)
+gen D1Lower=0
+replace D1Lower=1 if spyadjcloseLnDayRtn<=PL1
+
+//Upper%
+
+egen PL90= pctile(spyadjcloseLnDayRtn), p(90)
+gen D1Upper=0
+replace D1Upper=1 if spyadjcloseLnDayRtn>=PL90
 
 //Lower 2%
 egen PL2= pctile(spyadjcloseLnDayRtn), p(2)
@@ -48,27 +70,6 @@ replace D2Lower=1 if spyadjcloseLnDayRtn<=PL2
 egen PL98= pctile(spyadjcloseLnDayRtn), p(98)
 gen D2upper=0
 replace D2upper=1 if spyadjcloseLnDayRtn>=PL98
-
-//Lower 1%
-egen PL1= pctile(spyadjcloseLnDayRtn), p(1)
-gen D1Lower=0
-replace D1Lower=1 if spyadjcloseLnDayRtn<=PL1
-
-//Upper 1%
-
-egen PL90= pctile(spyadjcloseLnDayRtn), p(90)
-gen D1Upper=0
-replace D1Upper=1 if spyadjcloseLnDayRtn>=PL90
-
-//Lower 0.5%
-egen PL05= pctile(spyadjcloseLnDayRtn), p(0.5)
-gen D05Lower=0
-replace D05Lower=1 if spyadjcloseLnDayRtn<=PL05
-
-//Upper 0.5%
-egen PL995= pctile(spyadjcloseLnDayRtn), p(99.5)
-gen D05upper=0
-replace D05upper=1 if spyadjcloseLnDayRtn>=PL995
 
 //Next we will generate our CSSD and CSAD variables to be used for our regression
 
