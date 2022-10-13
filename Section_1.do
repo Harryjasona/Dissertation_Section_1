@@ -55,7 +55,7 @@ egen PL1= pctile(spyadjcloseLnDayRtn), p(1)
 gen D1Lower=0
 replace D1Lower=1 if spyadjcloseLnDayRtn<=PL1
 
-//Upper%
+//Upper 1%
 
 egen PL90= pctile(spyadjcloseLnDayRtn), p(90)
 gen D1Upper=0
